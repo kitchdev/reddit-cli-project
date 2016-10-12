@@ -1,22 +1,23 @@
-var request = require('request');
+
+var requestJson = require('./requestJson.js').requestJson;
 
 /*
 This function should "return" the default homepage posts as an array of objects
 */
 function getHomepage(callback) {
   // Load reddit.com/.json and call back with the array of posts
-  // TODO: REPLACE request with requestAsJson!
-  request('https://reddit.com/.json', function(err, res) {
+  // TO DO: REPLACE request with requestAsJson!
+  requestJson('https://reddit.com/.json', function(err, res) {
     if (err) {
       callback(err);
     }
     else {
       try {
-        var response = JSON.parse(res.body);
-        callback(null, response.data.children); // look at the result and explain why we're returning .data.children
+
+        callback(null, res.data.children); // look at the result and explain why we're returning .data.children
       }
-      catch(e) {
-        callback(e);
+      catch(err) {
+        callback(err);
       }
     }
   });
@@ -29,6 +30,7 @@ In contrast to the `getHomepage` function, this one accepts a `sortingMethod` pa
 function getSortedHomepage(sortingMethod, callback) {
   // Load reddit.com/{sortingMethod}.json and call back with the array of posts
   // Check if the sorting method is valid based on the various Reddit sorting methods
+  var sort = sortingMethod
 }
 
 /*
@@ -58,3 +60,13 @@ function getSubreddits(callback) {
 module.exports = {
   // ...
 };
+
+getHomepage(function(err, data){
+  if(err){
+    console.log("an error has occured...")
+  }
+  else{
+    console.log(data);
+  }
+})
+
