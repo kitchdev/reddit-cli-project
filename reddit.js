@@ -30,14 +30,38 @@ In contrast to the `getHomepage` function, this one accepts a `sortingMethod` pa
 function getSortedHomepage(sortingMethod, callback) {
   // Load reddit.com/{sortingMethod}.json and call back with the array of posts
   // Check if the sorting method is valid based on the various Reddit sorting methods
-  var sort = sortingMethod
+  requestJson('https://reddit.com/'+sortingMethod +'.json', function(err, res){
+    if(err){
+      callback(err);
+    }
+    else {
+      try{
+         callback(null, res.data.children);
+    }
+    catch(err){
+      callback(err);
+    }
+  }
+})
 }
-
 /*
 This function should "return" the posts on the front page of a subreddit as an array of objects.
 */
 function getSubreddit(subreddit, callback) {
   // Load reddit.com/r/{subreddit}.json and call back with the array of posts
+  requestJson('https://reddit.com/r/'+ subreddit + '.json', function(err, res){
+    if(err){
+      callback(err);
+      }
+      else{
+        try{
+          callback(null, res.data.children);
+        }
+        catch(err){
+          callback(err);
+        }
+      }
+  })
 }
 
 /*
@@ -47,6 +71,19 @@ In contrast to the `getSubreddit` function, this one accepts a `sortingMethod` p
 function getSortedSubreddit(subreddit, sortingMethod, callback) {
   // Load reddit.com/r/{subreddit}/{sortingMethod}.json and call back with the array of posts
   // Check if the sorting method is valid based on the various Reddit sorting methods
+  requestJson("https//reddit.com/r/"+ subreddit + sortingMethod + ".json", function(err,res){
+    if(err){
+      callback(err);
+    }
+    else{
+      try{
+        callback(null, res.data.children);
+      }
+      catch(err){
+        callback(err);
+      }
+    }
+  });
 }
 
 /*
@@ -54,19 +91,35 @@ This function should "return" all the popular subreddits
 */
 function getSubreddits(callback) {
   // Load reddit.com/subreddits.json and call back with an array of subreddits
+  requestJson("https//reddit.com/subreddits.json"), function(err, res){
+    if(err){
+      callback(err);
+    }
+    else{
+      try{
+        callback(null, res.data.children);
+      }
+      catch(err){
+        callback(err);
+      }
+    }
+  }
 }
 
 // Export the API
 module.exports = {
-  // ...
+  getHomepage: getHomepage,
+  getSortedHomepage: getSortedHomepage,
+  getSubreddit: getSubreddit,
+  getSortedSubreddit: getSortedSubreddit,
+  getSubreddits: getSubreddits
 };
 
 getHomepage(function(err, data){
   if(err){
-    console.log("an error has occured...")
+    console.log("an error has occured...");
   }
   else{
-    console.log(data);
   }
-})
+});
 
